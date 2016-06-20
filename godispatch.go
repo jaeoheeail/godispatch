@@ -4,22 +4,22 @@ import (
 	"sync"
 )
 
-// Master has its own ID and its Worker ID
+// Master has its own ID and its Slave ID
 type Master struct {
-	MasterID, WorkerID string
+	MasterID, SlaveID string
 }
 
 // Dispatcher dispatches work requests
 type Dispatcher struct {
 	sync.RWMutex
-	MasterWorkerMap map[Master]*Worker // There can be multiple Masters with the same MasterID but different WorkerID
+	MasterWorkerMap map[Master]*Worker // There can be multiple Masters with the same MasterID but different SlaveID
 	WorkHandler     func(w Work)
 }
 
 // Work received by Workers
 type Work struct {
 	MasterID  string `json:"MasterID"`
-	WorkerID  string `json:"WorkerID"`
+	SlaveID   string `json:"SlaveID"`
 	EventTime int64  `json:"EventTime"`
 }
 
@@ -33,7 +33,7 @@ func NewDispatcher(f func(w Work)) *Dispatcher {
 
 // Dispatch work to worker that matches WorkID
 func (d *Dispatcher) Dispatch(w Work) {
-	m := Master{w.MasterID, w.WorkerID}
+	m := Master{w.MasterID, w.SlaveID}
 
 	d.Lock()
 	_, ok := d.MasterWorkerMap[m]
