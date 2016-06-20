@@ -18,15 +18,16 @@ type Dispatcher struct {
 
 // Work received by Workers
 type Work struct {
-	MasterID, WorkerID string
-	EventTime          int64
+	MasterID  string `json:"MasterID"`
+	SlaveID   string `json:"SlaveID"`
+	EventTime int64  `json:"EventTime"`
 }
 
 // NewDispatcher returns a Dispatcher instance
 func NewDispatcher(i interface{}) Dispatcher {
 	return &Dispatcher{
-		MasterMap:   make(map[Master]*Worker),
-		WorkHandler: i,
+		MasterWorkerMap: make(map[Master]*Worker),
+		WorkHandler:     i,
 	}
 }
 
@@ -35,13 +36,13 @@ func (d *Dispatcher) Dispatch(w Work) {
 	m := Master{w.MasterID, w.WorkerID}
 
 	d.Lock()
-	_, ok := d.MasterMap[m]
+	_, ok := d.MastMasterWorkerMaperMap[m]
 
 	if ok == false { // meter is not in meter map
-		d.MasterMap[m] = NewWorker()
-		d.MasterMap[m].Start(d)
+		d.MasterWorkerMap[m] = NewWorker()
+		d.MasterWorkerMap[m].Start(d)
 	}
-	workChannel := d.MasterMap[m].WorkChannel
+	workChannel := d.MasterWorkerMap[m].WorkChannel
 	d.Unlock()
 
 	// Send work to worker's Work Channel
@@ -52,7 +53,7 @@ func (d *Dispatcher) Dispatch(w Work) {
 func (d *Dispatcher) Close() {
 	// Closing connections...
 	d.RLock()
-	for _, worker := range d.MasterMap {
+	for _, worker := range d.MasterWorkerMap {
 		close(worker.WorkChannel) // dispatcher closes worker's channel
 		worker.QuitChan <- true   // sends worker quit signal
 	}
