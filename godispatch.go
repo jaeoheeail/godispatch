@@ -13,21 +13,21 @@ type Master struct {
 type Dispatcher struct {
 	sync.RWMutex
 	MasterWorkerMap map[Master]*Worker // There can be multiple Masters with the same MasterID but different WorkerID
-	WorkHandler     interface{}
+	WorkHandler     func(w Work)
 }
 
 // Work received by Workers
 type Work struct {
 	MasterID  string `json:"MasterID"`
-	SlaveID   string `json:"SlaveID"`
+	WorkerID  string `json:"WorkerID"`
 	EventTime int64  `json:"EventTime"`
 }
 
 // NewDispatcher returns a Dispatcher instance
-func NewDispatcher(i interface{}) Dispatcher {
+func NewDispatcher(f func(w Work)) *Dispatcher {
 	return &Dispatcher{
 		MasterWorkerMap: make(map[Master]*Worker),
-		WorkHandler:     i,
+		WorkHandler:     f,
 	}
 }
 
@@ -36,7 +36,7 @@ func (d *Dispatcher) Dispatch(w Work) {
 	m := Master{w.MasterID, w.WorkerID}
 
 	d.Lock()
-	_, ok := d.MastMasterWorkerMaperMap[m]
+	_, ok := d.MasterWorkerMap[m]
 
 	if ok == false { // meter is not in meter map
 		d.MasterWorkerMap[m] = NewWorker()

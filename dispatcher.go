@@ -1,7 +1,7 @@
 package godispatch
 
-// Dispatcher dispatches work to workers
-type Dispatcher interface {
+// GoDispatcher dispatches work to workers
+type GoDispatcher interface {
 	Dispatch(w Work)
 	Close()
 }

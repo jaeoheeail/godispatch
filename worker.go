@@ -29,7 +29,7 @@ func (w *Worker) Start(d *Dispatcher) {
 				wg.Add(1)
 				go func() {
 					defer wg.Done()
-					d.WorkHandler.Handle(work)
+					d.WorkHandler(work)
 				}()
 				wg.Wait()
 			case <-w.QuitChan:
