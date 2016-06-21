@@ -4,7 +4,7 @@ import (
 	"sync"
 )
 
-// Dispatcher dispatches work requests
+// Dispatcher dispatches work to worker
 type Dispatcher struct {
 	sync.RWMutex
 	MasterWorkerMap map[Master]*Worker // There can be multiple Masters with the same MasterID but different SlaveID
@@ -24,7 +24,7 @@ func (d *Dispatcher) Dispatch(w Work, m Master) {
 	d.Lock()
 	_, ok := d.MasterWorkerMap[m]
 
-	if ok == false { // meter is not in meter map
+	if ok == false { // Master is not in map
 		d.MasterWorkerMap[m] = NewWorker()
 		d.MasterWorkerMap[m].Start(d)
 	}
