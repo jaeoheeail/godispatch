@@ -21,6 +21,7 @@ func NewDispatcher(h interface{}) *Dispatcher {
 
 // Dispatch work to worker that matches WorkID
 func (d *Dispatcher) Dispatch(w Work, m Master) {
+
 	d.Lock()
 	_, ok := d.MasterWorkerMap[m]
 

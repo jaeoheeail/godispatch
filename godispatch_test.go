@@ -2,12 +2,14 @@ package godispatch
 
 import (
 	"strconv"
+	"sync"
 	"testing"
 	"time"
 
-	//log "github.com/Sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
+
+var handleLock *sync.RWMutex
 
 // MyWork is a Work struct used for testing
 type MyWork struct {
@@ -38,14 +40,16 @@ func (h *MyHandlerStruct) Handle(g Work) {
 	}
 
 	// Do some work...
-	time.Sleep(5000)
 	w.Done = true
 
+	handleLock.Lock()
 	finishedWork = append(finishedWork, w)
+	handleLock.Unlock()
 }
 
 // MakeHandler returns MyHandler interface
 func MakeHandler() MyHandler {
+	handleLock = new(sync.RWMutex)
 	return &MyHandlerStruct{}
 }
 
@@ -73,14 +77,18 @@ func TestDispatcher(t *testing.T) {
 		}
 	}
 
-	time.Sleep(1000000)
+	time.Sleep(1000000) // Wait until all work has been dispatched
 
+	d.Lock()
 	// Check MasterWorkerMap has 4 Masters
 	assert.Equal(t, len(d.MasterWorkerMap), 4)
+	d.Unlock()
 
+	handleLock.Lock()
 	for _, w := range finishedWork { // Check that all work is done
 		assert.Equal(t, w.Done, true)
 	}
+	handleLock.Unlock()
 
 	d.Close()
 
