@@ -1,6 +1,7 @@
 package godispatch
 
 import (
+	"log"
 	"sync"
 )
 
@@ -25,15 +26,17 @@ func (w *Worker) Start(d *Dispatcher) {
 		for {
 			select {
 			case work := <-w.WorkChannel:
-				// Worker: Received work
-				wg.Add(1)
-				go func() {
-					defer wg.Done()
-					d.WorkHandler.Handle(work)
-				}()
-				wg.Wait()
+				if work != nil {
+					log.Printf("Worker: Received Work %v\n", work)
+					wg.Add(1)
+					go func() {
+						defer wg.Done()
+						d.WorkHandler.Handle(work)
+					}()
+					wg.Wait()
+				}
 			case <-w.QuitChan:
-				// Worker: Received quit signal
+				log.Println("Worker: Received Quit Signal")
 				return
 			}
 		}

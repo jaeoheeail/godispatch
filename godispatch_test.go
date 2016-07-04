@@ -77,7 +77,7 @@ func TestDispatcher(t *testing.T) {
 		}
 	}
 
-	time.Sleep(1000000) // Wait until all work has been dispatched
+	time.Sleep(10000000) // Wait until all work has been dispatched
 
 	d.Lock()
 	// Check MasterWorkerMap has 4 Masters

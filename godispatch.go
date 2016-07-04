@@ -1,8 +1,13 @@
 package godispatch
 
 import (
+	"flag"
+	"io/ioutil"
+	"log"
 	"sync"
 )
+
+var debug = flag.Bool("d", false, "Set to True for debug info, default is false")
 
 // Dispatcher dispatches work to worker
 type Dispatcher struct {
@@ -13,6 +18,10 @@ type Dispatcher struct {
 
 // NewDispatcher returns a Dispatcher instance
 func NewDispatcher(h interface{}) *Dispatcher {
+	flag.Parse()
+	if !*debug {
+		log.SetOutput(ioutil.Discard)
+	}
 	return &Dispatcher{
 		MasterWorkerMap: make(map[Master]*Worker),
 		WorkHandler:     h.(Handler),
@@ -38,11 +47,12 @@ func (d *Dispatcher) Dispatch(w Work, m Master) {
 
 // Close closes all the workers' WorkChannels
 func (d *Dispatcher) Close() {
-	// Closing connections...
+	log.Println("Closing Work Channels...")
 	d.RLock()
 	for _, worker := range d.MasterWorkerMap {
 		close(worker.WorkChannel) // dispatcher closes worker's channel
 		worker.QuitChan <- true   // sends worker quit signal
 	}
 	d.RUnlock()
+	log.Println("All Work Channel(s) Closed")
 }
