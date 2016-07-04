@@ -91,7 +91,7 @@ func main() {
 
 ## Logging
 * Debug log is turned **off** by default
-* To turn on add the following flag: `-d=true`
+* To turn on, add the following flag: `-d=true`
 
 ## Testing
 * Refer to [`godispatch_test.go`](https://github.com/jaeoheeail/godispatch/blob/master/godispatch_test.go) for more details.
