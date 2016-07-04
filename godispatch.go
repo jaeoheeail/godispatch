@@ -22,6 +22,7 @@ func NewDispatcher(h interface{}) *Dispatcher {
 	if !*debug {
 		log.SetOutput(ioutil.Discard)
 	}
+	log.Println("Dispatcher Created")
 	return &Dispatcher{
 		MasterWorkerMap: make(map[Master]*Worker),
 		WorkHandler:     h.(Handler),
