@@ -28,7 +28,7 @@
 
 ## Example
 
-1. Define the following structs for Work and Master
+* Define the following structs for Work and Master
 ```
 type MyWork struct {
 	MasterID string
@@ -41,7 +41,7 @@ type MyMaster struct {
 }
 ```
 
-2. Define interface for Handler and include `Handle` method and a constructor method (e.g. `MakeHandler`)
+* Define interface for Handler and include `Handle` method and a constructor method (e.g. `MakeHandler`)
 
 ```
 type MyHandler interface {
@@ -69,7 +69,7 @@ func MakeHandler() MyHandler {
 }
 ```
 
-3. Suppose you have 4 Masters, each with 4 Work to complete
+* Suppose you have 4 Masters, each with 4 Work to complete
 ```
 var _ Work = (*MyWork)(nil)
 var _ Master = (*MyMaster)(nil)
