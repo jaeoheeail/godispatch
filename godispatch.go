@@ -1,32 +1,41 @@
 package godispatch
 
 import (
-	"flag"
 	"io/ioutil"
 	"log"
+	"os"
 	"sync"
 )
-
-var debug = flag.Bool("d", false, "Set to True for debug info, default is false")
 
 // Dispatcher dispatches work to worker
 type Dispatcher struct {
 	sync.RWMutex
-	MasterWorkerMap map[Master]*Worker // There can be multiple Masters with the same MasterID but different SlaveID
+	MasterWorkerMap map[Master]*Worker
 	WorkHandler     Handler
+	debug           bool // Set to true for godispatch debug info
 }
 
 // NewDispatcher returns a Dispatcher instance
-func NewDispatcher(h interface{}) *Dispatcher {
-	flag.Parse()
-	if !*debug {
-		log.SetOutput(ioutil.Discard)
-	}
-	log.Println("Dispatcher Created")
-	return &Dispatcher{
+func NewDispatcher(h interface{}, debugOption ...bool) *Dispatcher {
+	d := &Dispatcher{
 		MasterWorkerMap: make(map[Master]*Worker),
 		WorkHandler:     h.(Handler),
+		debug:           false, // Default is false
 	}
+
+	log.SetOutput(ioutil.Discard)
+
+	if len(debugOption) > 0 {
+		d.debug = debugOption[0]
+	}
+
+	if d.debug == true {
+		log.SetOutput(os.Stdout)
+	}
+
+	log.Println("Dispatcher Created")
+
+	return d
 }
 
 // Dispatch work to worker that matches WorkID

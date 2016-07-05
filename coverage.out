@@ -1,13 +1,4 @@
 mode: set
-github.com/jaeoheeail/godispatch/godispatch.go:20.47,22.13 2 1
-github.com/jaeoheeail/godispatch/godispatch.go:25.2,29.3 2 1
-github.com/jaeoheeail/godispatch/godispatch.go:22.13,24.3 1 1
-github.com/jaeoheeail/godispatch/godispatch.go:33.49,38.17 3 1
-github.com/jaeoheeail/godispatch/godispatch.go:42.2,46.18 3 1
-github.com/jaeoheeail/godispatch/godispatch.go:38.17,41.3 2 1
-github.com/jaeoheeail/godispatch/godispatch.go:50.30,53.43 3 1
-github.com/jaeoheeail/godispatch/godispatch.go:57.2,58.43 2 1
-github.com/jaeoheeail/godispatch/godispatch.go:53.43,56.3 2 1
 github.com/jaeoheeail/godispatch/worker.go:15.26,20.2 1 1
 github.com/jaeoheeail/godispatch/worker.go:23.39,25.12 2 1
 github.com/jaeoheeail/godispatch/worker.go:25.12,26.7 1 1
@@ -17,3 +8,14 @@ github.com/jaeoheeail/godispatch/worker.go:38.4,40.11 2 1
 github.com/jaeoheeail/godispatch/worker.go:29.20,32.16 3 1
 github.com/jaeoheeail/godispatch/worker.go:36.6,36.15 1 1
 github.com/jaeoheeail/godispatch/worker.go:32.16,35.7 2 1
+github.com/jaeoheeail/godispatch/godispatch.go:19.68,28.26 3 1
+github.com/jaeoheeail/godispatch/godispatch.go:32.2,32.21 1 1
+github.com/jaeoheeail/godispatch/godispatch.go:36.2,38.10 2 1
+github.com/jaeoheeail/godispatch/godispatch.go:28.26,30.3 1 1
+github.com/jaeoheeail/godispatch/godispatch.go:32.21,34.3 1 1
+github.com/jaeoheeail/godispatch/godispatch.go:42.49,47.17 3 1
+github.com/jaeoheeail/godispatch/godispatch.go:51.2,55.18 3 1
+github.com/jaeoheeail/godispatch/godispatch.go:47.17,50.3 2 1
+github.com/jaeoheeail/godispatch/godispatch.go:59.30,62.43 3 1
+github.com/jaeoheeail/godispatch/godispatch.go:66.2,67.43 2 1
+github.com/jaeoheeail/godispatch/godispatch.go:62.43,65.3 2 1

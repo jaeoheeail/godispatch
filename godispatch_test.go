@@ -59,9 +59,54 @@ var _ Handler = (*MyHandlerStruct)(nil)
 
 var finishedWork []MyWork
 
-func TestDispatcher(t *testing.T) {
+func TestDispatcherNoDebugging(t *testing.T) {
 	h := MakeHandler()
 	d := NewDispatcher(h)
+
+	masters := []MyMaster{
+		{MasterID: "1"},
+		{MasterID: "2"},
+		{MasterID: "3"},
+		{MasterID: "4"},
+	}
+
+	for _, m := range masters {
+		for i := 1; i < 5; i++ {
+			w := MyWork{MasterID: m.MasterID, WorkID: strconv.Itoa(i), Done: false}
+			go d.Dispatch(w, m)
+		}
+	}
+
+	time.Sleep(10000000) // Wait until all work has been dispatched
+
+	d.Lock()
+	// Check MasterWorkerMap has 4 Masters
+	assert.Equal(t, len(d.MasterWorkerMap), 4)
+	d.Unlock()
+
+	handleLock.Lock()
+	for _, w := range finishedWork { // Check that all work is done
+		assert.Equal(t, w.Done, true)
+	}
+	handleLock.Unlock()
+
+	d.Close()
+
+	// Check Workers' WorkChannel in MasterWorkerMap are closed
+	for _, m := range masters {
+		workChannel := d.MasterWorkerMap[m].WorkChannel
+		defer func() {
+			if r := recover(); r == nil {
+				t.Errorf("Panic did not occur")
+			}
+		}()
+		workChannel <- MyWork{} // Expect panic to occur
+	}
+}
+
+func TestDispatcherWithDebugging(t *testing.T) {
+	h := MakeHandler()
+	d := NewDispatcher(h, true)
 
 	masters := []MyMaster{
 		{MasterID: "1"},
